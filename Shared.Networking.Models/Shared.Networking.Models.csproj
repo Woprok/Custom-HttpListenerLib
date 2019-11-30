@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BDA4C682-0C92-463C-93A5-426DDE187CAB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Shared.Networking.Models</RootNamespace>
+    <AssemblyName>Shared.Networking.Models</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.3.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Interfaces\IClientModel.cs" />
+    <Compile Include="Interfaces\IConnector.cs" />
+    <Compile Include="Interfaces\IDataModel.cs" />
+    <Compile Include="Interfaces\IGenericDataModel.cs" />
+    <Compile Include="Interfaces\ISendReceiveModel.cs" />
+    <Compile Include="Interfaces\IServerModel.cs" />
+    <Compile Include="Interfaces\StreamModels\IDataStreamModel.cs" />
+    <Compile Include="Interfaces\StreamModels\IReceiver.cs" />
+    <Compile Include="Interfaces\StreamModels\ISender.cs" />
+    <Compile Include="Interfaces\StreamModels\ISerializationModel.cs" />
+    <Compile Include="Interfaces\StreamModels\ISerializer.cs" />
+    <Compile Include="Models\ClientModel.cs" />
+    <Compile Include="Models\DataModel.cs" />
+    <Compile Include="Models\GenericDataModel.cs" />
+    <Compile Include="Models\SendReceiveModel.cs" />
+    <Compile Include="Models\ServerModel.cs" />
+    <Compile Include="Models\StreamModels\BinaryFormatterSerializer.cs" />
+    <Compile Include="Models\StreamModels\DataStreamModel.cs" />
+    <Compile Include="Models\StreamModels\ReceiverModel.cs" />
+    <Compile Include="Models\StreamModels\SenderModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shared.Common.Exceptions\Shared.Common.Exceptions.csproj">
+      <Project>{911F8AC1-4648-46B8-A37D-BB48CA4F6746}</Project>
+      <Name>Shared.Common.Exceptions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shared.Common.Models\Shared.Common.Models.csproj">
+      <Project>{9C93C3A9-BB53-4EF6-B9B9-2B00227FFBC8}</Project>
+      <Name>Shared.Common.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shared.Common\Shared.Common.csproj">
+      <Project>{DF7911E0-0410-4DB8-B964-9FAAD1972E70}</Project>
+      <Name>Shared.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shared.Networking\Shared.Networking.csproj">
+      <Project>{6DAAA08C-9968-465C-8E6F-447F7A383EE8}</Project>
+      <Name>Shared.Networking</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
