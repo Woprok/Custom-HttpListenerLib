@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
+using System.Net.WebSockets;
+using System.Threading;
 
 namespace Shared.Networking
 {
@@ -13,6 +16,30 @@ namespace Shared.Networking
         int ReceiveBufferSize { get; set; }
         int SendBufferSize { get; set; }
         void Close();
+        void SendAsync();
+    }
+
+    public class SimpleClient : IClient
+    {
+        private readonly WebSocket socket;
+
+        public Stream GetStream()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool Connected { get; set; }
+        public int ReceiveBufferSize { get; set; }
+        public int SendBufferSize { get; set; }
+        public void Close()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SendAsync(ArraySegment<byte> buffer, WebSocketMessageType messageType, bool endOfMessage, CancellationToken cancellationToken)
+        {
+            socket.SendAsync(buffer, messageType, endOfMessage, cancellationToken);
+        }
     }
 
     /// <summary>

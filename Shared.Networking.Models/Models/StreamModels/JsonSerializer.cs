@@ -20,9 +20,9 @@ namespace Shared.Networking.Models.Models.StreamModels
         //    throw new NotImplementedException();
         //}
 
-        public ArraySegment<byte> SerializeSendingData<TE>(TE stream)
+        public ArraySegment<byte> SerializeSendingData<TE>(TE item)
         {
-            string serialized = JsonConvert.SerializeObject(stream);
+            string serialized = JsonConvert.SerializeObject(item);
             byte[] buffer = Encoding.UTF8.GetBytes(serialized);
             return new ArraySegment<byte>(buffer);
         }

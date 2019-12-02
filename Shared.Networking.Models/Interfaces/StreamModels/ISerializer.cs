@@ -21,7 +21,7 @@ namespace Shared.Networking.Models.Interfaces.StreamModels
         /// <summary>
         /// Generic fallback serialize method.
         /// </summary>
-        ArraySegment<byte> SerializeSendingData<TE>(TE stream);
+        ArraySegment<byte> SerializeSendingData<TE>(TE item);
         
         /// <summary>
         /// Generic fallback deserialize method.
