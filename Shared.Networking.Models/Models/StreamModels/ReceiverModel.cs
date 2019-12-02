@@ -7,19 +7,16 @@ using Shared.Networking.Models.Interfaces.StreamModels;
 
 namespace Shared.Networking.Models.Models.StreamModels
 {
-    /// <inheritdoc cref="IReceiver{T}"/>
-    public sealed class ReceiverModel<T> : DataStreamModel, IReceiver<T>
+    /// <inheritdoc cref="IReceiver"/>
+    public sealed class ReceiverModel : DataStreamModel, IReceiver
     {
         /// <inheritdoc/>
-        public event DataReceived<T> OnDataReceived;
+        public event DataReceived<object> OnDataReceived;
 
         /// <inheritdoc/>
-        public event ClientDisconnected<T> OnClientDisconnected;
+        public event ClientDisconnected OnClientDisconnected;
 
-        public ReceiverModel(IClient client, ISerializer<T> serializer) : base(client)
-        {
-            Serializer = serializer;
-        }
+        public ReceiverModel(IClient client, ISerializer serializer) : base(client, serializer) { }
 
         /// <inheritdoc/>
         /// <exception cref="EventNotSubscribedException"/>
@@ -28,39 +25,24 @@ namespace Shared.Networking.Models.Models.StreamModels
             byte[] buffer = new byte[Client.ReceiveBufferSize];
             while (IsConnected && !token.IsCancellationRequested)
             {
-                MemoryStream dataMemoryStream;
-                T deserializedObject;
-                using (dataMemoryStream = new MemoryStream())
+                object deserializedObject;
+                string content = Client.ReceiveAsync();
+
+
+                if (string.IsNullOrEmpty(content))
                 {
-                    int bytesRead = await ClientStream.ReadAsync(buffer, 0, buffer.Length, token);
-                    while (bytesRead > buffer.Length)
-                    {
-                        dataMemoryStream.Write(buffer, 0, bytesRead);
-                        bytesRead = await ClientStream.ReadAsync(buffer, 0, buffer.Length, token);
-                    }
-                    
-                    dataMemoryStream.Write(buffer, 0, bytesRead);
-                    dataMemoryStream.Position = 0;
-
-
-                    if (bytesRead == 0)
-                    {
-                        if (OnClientDisconnected == null)
-                            throw new EventNotSubscribedException("Disconnect method in Receiver not subscribed!");
-                        await Task.Run(() => OnClientDisconnected?.Invoke(this), token);
-                    }
-                    else
-                    {
-                        deserializedObject = Serializer.DeserializeReceivedData(dataMemoryStream);
-                        if (OnDataReceived == null)
-                            throw new EventNotSubscribedException("Receive method not subscribed!");
-                        await Task.Run(() => OnDataReceived?.Invoke(this, deserializedObject), token);
-                    }
+                    if (OnClientDisconnected == null)
+                        throw new EventNotSubscribedException("Disconnect method in Receiver not subscribed!");
+                    await Task.Run(() => OnClientDisconnected?.Invoke(this), token);
+                }
+                else
+                {
+                    deserializedObject = Serializer.DeserializeReceivedData<dynamic>(content);
+                    if (OnDataReceived == null)
+                        throw new EventNotSubscribedException("Receive method not subscribed!");
+                    await Task.Run(() => OnDataReceived?.Invoke(this, deserializedObject), token);
                 }
             }
         }
-
-        /// <inheritdoc/>
-        public ISerializer<T> Serializer { get; }
     }
 }

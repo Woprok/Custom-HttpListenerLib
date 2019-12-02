@@ -23,8 +23,8 @@ namespace Shared.Networking.Models.Interfaces
     /// United model for receiving and sending data of type T.
     /// </summary>
     /// <inheritdoc cref="IStartStopModel"/>
-    /// <inheritdoc cref="ISerializationModel{T}"/>
-    public interface ISendReceiveModel<T> : IStartStopModel, ISerializationModel<T>
+    /// <inheritdoc cref="ISerializationModel"/>
+    public interface ISendReceiveModel<T> : IStartStopModel, ISerializationModel
     {
         /// <summary>
         /// Subscribe-able event used for obtaining client disconnected status.
@@ -49,11 +49,11 @@ namespace Shared.Networking.Models.Interfaces
         /// <inheritdoc cref="IClient"/>
         IClient Client { get; }
 
-        /// <inheritdoc cref="IReceiver{T}"/>
-        IReceiver<T> Receiver { get; }
+        /// <inheritdoc cref="IReceiver"/>
+        IReceiver Receiver { get; }
         
-        /// <inheritdoc cref="ISender{T}"/>
-        ISender<T> Sender { get; }
+        /// <inheritdoc cref="ISender"/>
+        ISender Sender { get; }
 
         /// <summary>
         /// Method for sending object of type T.

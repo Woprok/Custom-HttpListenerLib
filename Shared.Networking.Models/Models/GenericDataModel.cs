@@ -54,7 +54,7 @@ namespace Shared.Networking.Models.Models
         /// Default constructor calls StartRunning();
         /// Can be opted out by calling it will autorun = false
         /// </summary>>
-        protected GenericDataModel(IPEndPoint ipEndPoint, ISerializer<T> serializer, int defaultBufferSize = DefaultBufferSize, bool autorun = true) : base(ipEndPoint, defaultBufferSize)
+        protected GenericDataModel(IPEndPoint ipEndPoint, ISerializer serializer, int defaultBufferSize = DefaultBufferSize, bool autorun = true) : base(ipEndPoint, defaultBufferSize)
         {
             Serializer = serializer;
             if (autorun)
@@ -67,7 +67,7 @@ namespace Shared.Networking.Models.Models
         public TConnector Model { get; private set; }
 
         /// <inheritdoc/>
-        public ISerializer<T> Serializer { get; }
+        public ISerializer Serializer { get; }
 
         /// <inheritdoc/>
         public Dictionary<long, ISendReceiveModel<T>> DataExchangers { get; set; } = new Dictionary<long, ISendReceiveModel<T>>();

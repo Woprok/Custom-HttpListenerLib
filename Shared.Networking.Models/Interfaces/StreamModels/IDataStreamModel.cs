@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Net.Sockets;
-
-namespace Shared.Networking.Models.Interfaces.StreamModels
+﻿namespace Shared.Networking.Models.Interfaces.StreamModels
 {
     /// <summary>
     /// Provides shared methods for Sending and Receiving over TcpClient.
@@ -9,14 +6,14 @@ namespace Shared.Networking.Models.Interfaces.StreamModels
     public interface IDataStreamModel
     {
         /// <summary>
-        /// Returns TcpClient currently in use by model.
+        /// Returns IClient currently in use by model.
         /// </summary>
         IClient Client { get; }
 
         /// <summary>
-        /// Returns TcpClient data stream.
+        /// Returns ISerializer currently in use by model.
         /// </summary>
-        Stream ClientStream { get; }
+        ISerializer Serializer { get; }
 
         /// <summary>
         /// Returns current connection state of TcpClient.

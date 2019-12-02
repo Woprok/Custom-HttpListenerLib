@@ -20,7 +20,7 @@ namespace Shared.Networking.Models.Models
         /// <inheritdoc/>
         public event SendReceiveModelDataReceived<T> OnSendReceiveModelDataReceived;
 
-        public SendReceiveModel(long id, IClient client, ISerializer<T> serializer)
+        public SendReceiveModel(long id, IClient client, ISerializer serializer)
         {
             Id = id;
             Client = client;
@@ -34,10 +34,10 @@ namespace Shared.Networking.Models.Models
         public IClient Client { get; }
         
         /// <inheritdoc/>
-        public IReceiver<T> Receiver { get; private set; }
+        public IReceiver Receiver { get; private set; }
 
         /// <inheritdoc/>
-        public ISender<T> Sender { get; private set; }
+        public ISender Sender { get; private set; }
 
         /// <inheritdoc/>
         public bool IsValidated { get; set; } = false;
@@ -46,13 +46,13 @@ namespace Shared.Networking.Models.Models
         public bool IsValidConnection => IsValidated && Client.Connected;
 
         /// <inheritdoc/>
-        public ISerializer<T> Serializer { get; }
+        public ISerializer Serializer { get; }
 
         /// <inheritdoc/>
         protected override void OnModelInitialize()
         {
-            Receiver = new ReceiverModel<T>(Client, Serializer);
-            Sender = new SenderModel<T>(Client, Serializer);
+            Receiver = new ReceiverModel(Client, Serializer);
+            Sender = new SenderModel(Client, Serializer);
         }
         
         /// <inheritdoc/>
@@ -64,11 +64,11 @@ namespace Shared.Networking.Models.Models
             Task.Factory.StartNew(() => Receiver.ReceiveAsync(CurrentCancellationToken), CurrentCancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
 
-        private void Sender_OnDataSent(ISender<T> sender, T data) => OnSendReceiveModelDataSent?.Invoke(this, data);
+        private void Sender_OnDataSent(ISender sender, T data) => OnSendReceiveModelDataSent?.Invoke(this, data);
 
-        private void Receiver_OnDataReceived(IReceiver<T> receiver, T data) => OnSendReceiveModelDataReceived?.Invoke(this, data);
+        private void Receiver_OnDataReceived(IReceiver receiver, T data) => OnSendReceiveModelDataReceived?.Invoke(this, data);
 
-        private void Receiver_OnClientDisconnected(IReceiver<T> receiver) => OnSendReceiveModelDisconnected?.Invoke(this);
+        private void Receiver_OnClientDisconnected(IReceiver receiver) => OnSendReceiveModelDisconnected?.Invoke(this);
 
         /// <inheritdoc/>
         protected override void OnModelStop()

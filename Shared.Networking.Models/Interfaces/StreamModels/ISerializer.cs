@@ -26,6 +26,6 @@ namespace Shared.Networking.Models.Interfaces.StreamModels
         /// <summary>
         /// Generic fallback deserialize method.
         /// </summary>
-        TE DeserializeReceivedData<TE>(ArraySegment<byte> stream);
+        TE DeserializeReceivedData<TE>(string stream);
     }
 }

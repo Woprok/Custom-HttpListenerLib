@@ -1,6 +1,5 @@
 ﻿using System;
-using System.IO;
-using System.Net.Sockets;
+using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Shared.Common.Exceptions;
@@ -14,25 +13,19 @@ namespace Shared.Networking.Models.Models.StreamModels
         /// <inheritdoc/>
         public event DataSent<object> OnDataSent;
 
-        public SenderModel(IClient client, ISerializer serializer) : base(client)
-        {
-            Serializer = serializer;
-        }
+        public SenderModel(IClient client, ISerializer serializer) : base(client, serializer) { }
         
         private async Task Send(ArraySegment<byte> data, CancellationToken token)
         {
-            await ClientStream.WriteAsync(data, 0, data.Length, token);
-            await ClientStream.FlushAsync(token);
+            await Client.SendAsync(data, WebSocketMessageType.Text, token);
         }
 
         /// <inheritdoc/>
         /// <exception cref="EventNotSubscribedException"/>
         public async Task SendAsync<TE>(TE item, CancellationToken token)
         {
-            ArraySegment<byte> serializedData;
-                
-            serializedData = Serializer.SerializeSendingData(item); 
-            
+            ArraySegment<byte> serializedData = Serializer.SerializeSendingData(item);
+
             if (IsConnected && !token.IsCancellationRequested)
             {
                 await Task.Factory.StartNew(() => Send(serializedData, token), token, TaskCreationOptions.PreferFairness, TaskScheduler.Default);
@@ -41,8 +34,5 @@ namespace Shared.Networking.Models.Models.StreamModels
                 await Task.Run(() => OnDataSent?.Invoke(this, item), token);
             }
         }
-
-        /// <inheritdoc/>
-        public ISerializer Serializer { get; }
     }
 }

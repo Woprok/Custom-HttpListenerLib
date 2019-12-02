@@ -17,7 +17,7 @@ namespace Shared.Networking.Models.Interfaces
         TConnector Model { get; }
 
         /// <inheritdoc cref="ISerializer{T}"/>
-        ISerializer<T> Serializer { get; }
+        ISerializer Serializer { get; }
 
         /// <summary>
         /// Collection of all current connections.

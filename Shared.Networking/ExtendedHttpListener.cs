@@ -2,7 +2,9 @@
 using System.IO;
 using System.Net;
 using System.Net.WebSockets;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Shared.Networking
 {
@@ -16,7 +18,8 @@ namespace Shared.Networking
         int ReceiveBufferSize { get; set; }
         int SendBufferSize { get; set; }
         void Close();
-        void SendAsync();
+        Task SendAsync(ArraySegment<byte> buffer, WebSocketMessageType messageType, CancellationToken cancellationToken);
+        string ReceiveAsync();
     }
 
     public class SimpleClient : IClient
@@ -36,9 +39,28 @@ namespace Shared.Networking
             throw new System.NotImplementedException();
         }
 
-        public void SendAsync(ArraySegment<byte> buffer, WebSocketMessageType messageType, bool endOfMessage, CancellationToken cancellationToken)
+        public async Task SendAsync(ArraySegment<byte> buffer, WebSocketMessageType messageType, CancellationToken cancellationToken)
         {
-            socket.SendAsync(buffer, messageType, endOfMessage, cancellationToken);
+            await socket.SendAsync(buffer, messageType, true, cancellationToken);
+        }
+
+        public async string ReceiveAsync()
+        {
+            ArraySegment<byte> buffer = new ArraySegment<byte>(new byte[ReceiveBufferSize]);
+            WebSocketReceiveResult result = null;
+            using (MemoryStream dataMemoryStream = new MemoryStream())
+            {
+                do
+                {
+                    result = await socket.ReceiveAsync(buffer, CancellationToken.None);
+                    dataMemoryStream.Write(buffer.Array, buffer.Offset, result.Count);
+                }
+                while (!result.EndOfMessage);
+                dataMemoryStream.Position = 0;
+
+                using StreamReader reader = new StreamReader(dataMemoryStream, Encoding.UTF8);
+                return await reader.ReadToEndAsync();
+            }
         }
     }
 
