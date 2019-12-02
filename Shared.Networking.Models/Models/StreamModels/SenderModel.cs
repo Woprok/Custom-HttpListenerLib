@@ -2,7 +2,7 @@
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using Shared.Common.Exceptions.Exceptions;
+using Shared.Common.Exceptions;
 using Shared.Networking.Models.Interfaces.StreamModels;
 
 namespace Shared.Networking.Models.Models.StreamModels
@@ -13,7 +13,7 @@ namespace Shared.Networking.Models.Models.StreamModels
         /// <inheritdoc/>
         public event DataSent<T> OnDataSent;
 
-        public SenderModel(TcpClient client, ISerializer<T> serializer) : base(client)
+        public SenderModel(IClient client, ISerializer<T> serializer) : base(client)
         {
             Serializer = serializer;
         }
@@ -29,7 +29,7 @@ namespace Shared.Networking.Models.Models.StreamModels
         public async Task SendAsync(T obj, CancellationToken token)
         {
             byte[] serializedData;
-            await using (MemoryStream memory = new MemoryStream())
+            using (MemoryStream memory = new MemoryStream())
             {
                 serializedData = Serializer.SerializeSendingData(obj, memory); 
             }

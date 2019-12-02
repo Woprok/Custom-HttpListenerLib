@@ -1,5 +1,5 @@
 ﻿using System.Net.Sockets;
-using Shared.Common.Models.Interfaces;
+using Shared.Common.Interfaces;
 using Shared.Networking.Models.Interfaces.StreamModels;
 
 namespace Shared.Networking.Models.Interfaces
@@ -46,8 +46,8 @@ namespace Shared.Networking.Models.Interfaces
         /// </summary>
         long Id { get; }
 
-        /// <inheritdoc cref="TcpClient"/>
-        TcpClient Client { get; }
+        /// <inheritdoc cref="IClient"/>
+        IClient Client { get; }
 
         /// <inheritdoc cref="IReceiver{T}"/>
         IReceiver<T> Receiver { get; }

@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,14 +30,13 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientModel.cs" />
-    <Compile Include="DataModels\GeneralClientMessageModel.cs" />
     <Compile Include="DataModels\GeneralServerMessageModel.cs" />
     <Compile Include="Entities\Messages\CoreMessage.cs" />
     <Compile Include="Entities\Messages\DataMessage.cs" />
@@ -44,13 +44,9 @@
     <Compile Include="ServerModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Shared.Common.Exceptions\Shared.Common.Exceptions.csproj">
-      <Project>{911F8AC1-4648-46B8-A37D-BB48CA4F6746}</Project>
-      <Name>Shared.Common.Exceptions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Shared.Common.Models\Shared.Common.Models.csproj">
-      <Project>{9c93c3a9-bb53-4ef6-b9b9-2b00227ffbc8}</Project>
-      <Name>Shared.Common.Models</Name>
+    <ProjectReference Include="..\Shared.Common\Shared.Common.csproj">
+      <Project>{DF7911E0-0410-4DB8-B964-9FAAD1972E70}</Project>
+      <Name>Shared.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shared.Networking.Models\Shared.Networking.Models.csproj">
       <Project>{BDA4C682-0C92-463C-93A5-426DDE187CAB}</Project>

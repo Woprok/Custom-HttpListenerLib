@@ -1,4 +1,4 @@
-﻿namespace Shared.Common.Models.Enums
+﻿namespace Shared.Common.Enums
 {
     /// <summary>
     /// For determining state of model that implements Initialize, Start, Stop

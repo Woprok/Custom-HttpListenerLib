@@ -12,7 +12,7 @@ namespace Shared.Networking.Models.Interfaces
     /// <inheritdoc cref="IConnector"/>
     public interface IServerModel : IConnector
     {
-        /// <inheritdoc cref="HttpListener"/>
-        ExtendedHttpListener Listener { get; }
+        /// <inheritdoc cref="IListener"/>
+        IListener Listener { get; }
     }
 }

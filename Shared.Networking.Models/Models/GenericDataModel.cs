@@ -109,7 +109,7 @@ namespace Shared.Networking.Models.Models
             }
         }
 
-        private void IncludeNewClientHandler(TcpClient newclient)
+        private void IncludeNewClientHandler(IClient newclient)
         {
             newclient.ReceiveBufferSize = BufferSize;
             newclient.SendBufferSize = BufferSize;

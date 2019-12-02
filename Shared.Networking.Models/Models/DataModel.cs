@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using Shared.Common.Models.Models;
+using Shared.Common.Models;
 using Shared.Networking.Models.Interfaces;
 
 namespace Shared.Networking.Models.Models

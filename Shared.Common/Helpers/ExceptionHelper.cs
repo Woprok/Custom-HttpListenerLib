@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Shared.Common.Exceptions.Helpers
+namespace Shared.Common.Helpers
 {
     public static class ExceptionHelper
     {

@@ -8,13 +8,13 @@ namespace Shared.Networking.Models.Models.StreamModels
     /// <inheritdoc/>
     public abstract class DataStreamModel : IDataStreamModel
     {
-        protected DataStreamModel(TcpClient client)
+        protected DataStreamModel(IClient client)
         {
             Client = client;
         }
 
         /// <inheritdoc/>
-        public TcpClient Client { get; }
+        public IClient Client { get; }
 
         /// <inheritdoc/>
         public Stream ClientStream => Client.GetStream();

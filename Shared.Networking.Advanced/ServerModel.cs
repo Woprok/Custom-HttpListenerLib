@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using Shared.Common.Exceptions.Exceptions;
+using Shared.Common.Exceptions;
 using Shared.Networking.Advanced.DataModels;
 using Shared.Networking.Advanced.Entities.Messages;
 using Shared.Networking.Models.Interfaces.StreamModels;
@@ -41,7 +41,7 @@ namespace Shared.Networking.Advanced
         /// Both Parameters can be null, if parameter is null it will be replaced by default value from this class.
         /// </summary>
         /// <inheritdoc/>
-        /// <exception cref="InvalidCallException">Whenever attempt to initialize more than one Message models happen.</exception>
+        /// <exception cref="Shared.Common.Exceptions.InvalidCallException">Whenever attempt to initialize more than one Message models happen.</exception>
         public void OpenMessageChannel(IPEndPoint newEndPoint = null, ISerializer<CoreMessage> newSerializer = null)
         {
             if (ServerMessageModel != null)

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Shared.Common.Exceptions.Exceptions
+namespace Shared.Common.Exceptions
 {
     /// <summary>
     /// Exception to notify programmer about possible error of not subscribing to provided events.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Shared.Common.Exceptions.Exceptions
+namespace Shared.Common.Exceptions
 {
     /// <summary>
     /// If method was called in incorrect order, e.g. like Start before Initialize etc.

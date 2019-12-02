@@ -1,13 +1,13 @@
 ﻿using System.Net;
 using System.Net.Sockets;
-using Shared.Common.Models.Interfaces;
+using Shared.Common.Interfaces;
 
 namespace Shared.Networking.Models.Interfaces
 {
     /// <summary>
     /// Default event for notifying of new client connection.
     /// </summary>
-    public delegate void ClientObtained(TcpClient newClient);
+    public delegate void ClientObtained(IClient newClient);
 
     /// <summary>
     /// Simple interface for managing client-server (IClientModel-IServerModel) connection.

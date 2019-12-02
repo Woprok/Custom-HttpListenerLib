@@ -2,7 +2,7 @@
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using Shared.Common.Exceptions.Exceptions;
+using Shared.Common.Exceptions;
 using Shared.Networking.Models.Interfaces.StreamModels;
 
 namespace Shared.Networking.Models.Models.StreamModels
@@ -16,7 +16,7 @@ namespace Shared.Networking.Models.Models.StreamModels
         /// <inheritdoc/>
         public event ClientDisconnected<T> OnClientDisconnected;
 
-        public ReceiverModel(TcpClient client, ISerializer<T> serializer) : base(client)
+        public ReceiverModel(IClient client, ISerializer<T> serializer) : base(client)
         {
             Serializer = serializer;
         }
@@ -30,7 +30,7 @@ namespace Shared.Networking.Models.Models.StreamModels
             {
                 MemoryStream dataMemoryStream;
                 T deserializedObject;
-                await using (dataMemoryStream = new MemoryStream())
+                using (dataMemoryStream = new MemoryStream())
                 {
                     int bytesRead = await ClientStream.ReadAsync(buffer, 0, buffer.Length, token);
                     while (bytesRead > buffer.Length)

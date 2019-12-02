@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 using System.Threading.Tasks;
-using Shared.Common.Models.Models;
+using Shared.Common.Models;
 using Shared.Networking.Models.Interfaces;
 using Shared.Networking.Models.Interfaces.StreamModels;
 using Shared.Networking.Models.Models.StreamModels;
@@ -20,7 +20,7 @@ namespace Shared.Networking.Models.Models
         /// <inheritdoc/>
         public event SendReceiveModelDataReceived<T> OnSendReceiveModelDataReceived;
 
-        public SendReceiveModel(long id, TcpClient client, ISerializer<T> serializer)
+        public SendReceiveModel(long id, IClient client, ISerializer<T> serializer)
         {
             Id = id;
             Client = client;
@@ -31,7 +31,7 @@ namespace Shared.Networking.Models.Models
         public long Id { get; }
 
         /// <inheritdoc/>
-        public TcpClient Client { get; }
+        public IClient Client { get; }
         
         /// <inheritdoc/>
         public IReceiver<T> Receiver { get; private set; }

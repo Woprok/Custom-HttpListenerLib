@@ -2,9 +2,9 @@
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using Shared.Common.Exceptions.Exceptions;
-using Shared.Common.Models.Enums;
-using Shared.Common.Models.Models;
+using Shared.Common.Enums;
+using Shared.Common.Exceptions;
+using Shared.Common.Models;
 using Shared.Networking.Models.Interfaces;
 
 namespace Shared.Networking.Models.Models
@@ -27,7 +27,7 @@ namespace Shared.Networking.Models.Models
         public IPEndPoint IpEndPoint { get; set; }
 
         /// <inheritdoc/>
-        public ExtendedHttpListener Listener { get; private set; }
+        public IListener Listener { get; private set; }
 
         /// <inheritdoc/>
         protected override void OnModelInitialize()
@@ -53,7 +53,7 @@ namespace Shared.Networking.Models.Models
         {
             while (InternalModelState == ModelState.Started && !token.IsCancellationRequested)
             {
-                TcpClient obtainedClient = await Task.Run(Listener.AcceptTcpClientAsync, token);
+                IClient obtainedClient = await Task.Run(Listener.AcceptClientAsync, token);
 
                 if (token.IsCancellationRequested || InternalModelState == ModelState.Stopped)
                     return;

@@ -26,7 +26,7 @@ namespace Demo.Server
         {
             while (!token.IsCancellationRequested)
             {
-                var hc = await server.GetContextAsync();
+                HttpListenerContext hc = await server.GetContextAsync();
 
                 Console.WriteLine("Request: " + hc.Request.Headers.AllKeys);
                 Console.WriteLine("Response: " + hc.Response.StatusCode);
@@ -46,7 +46,7 @@ namespace Demo.Server
 
                 try
                 {
-                    var ws = await hc.AcceptWebSocketAsync(null).ConfigureAwait(false);
+                    HttpListenerWebSocketContext ws = await hc.AcceptWebSocketAsync(null).ConfigureAwait(false);
                     if (ws != null)
                     {
                         Task.Run(() => HandleConnectionAsync(ws.WebSocket, token));
@@ -65,13 +65,14 @@ namespace Demo.Server
             {
                 while (ws.State == WebSocketState.Open && !cancellation.IsCancellationRequested)
                 {
-                    String messageString = await ReadString(ws).ConfigureAwait(false);
+                    string messageString = await ReadString(ws).ConfigureAwait(false);
                     Console.WriteLine("Received:" + messageString);
-                    var strReply = "OK"; // Process messageString and get your reply here;
-
-                    var buffer = Encoding.UTF8.GetBytes(strReply);
-                    var segment = new ArraySegment<byte>(buffer);
-                    await ws.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None).ConfigureAwait(false);
+                    
+                    string strReply = "OK"; // Process messageString and get your reply here;
+                    byte[] buffer = Encoding.UTF8.GetBytes(strReply);
+                    ArraySegment<byte> segment = new ArraySegment<byte>(buffer);
+                    await ws.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None)
+                        .ConfigureAwait(false);
                 }
 
                 Console.WriteLine("Close: ");
@@ -97,13 +98,13 @@ namespace Demo.Server
             }
         }
 
-        private static async Task<String> ReadString(WebSocket ws)
+        private static async Task<string> ReadString(WebSocket ws)
         {
-            ArraySegment<Byte> buffer = new ArraySegment<byte>(new Byte[8192]);
+            ArraySegment<byte> buffer = new ArraySegment<byte>(new byte[8192]);
 
             WebSocketReceiveResult result = null;
 
-            using (var ms = new MemoryStream())
+            using (MemoryStream ms = new MemoryStream())
             {
                 do
                 {
@@ -114,7 +115,7 @@ namespace Demo.Server
 
                 ms.Seek(0, SeekOrigin.Begin);
 
-                using (var reader = new StreamReader(ms, Encoding.UTF8))
+                using (StreamReader reader = new StreamReader(ms, Encoding.UTF8))
                 {
                     return reader.ReadToEnd();
                 }

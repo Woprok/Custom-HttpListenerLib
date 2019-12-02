@@ -7,10 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Server", "Demo.Server\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Common", "Shared.Common\Shared.Common.csproj", "{DF7911E0-0410-4DB8-B964-9FAAD1972E70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Common.Exceptions", "Shared.Common.Exceptions\Shared.Common.Exceptions.csproj", "{911F8AC1-4648-46B8-A37D-BB48CA4F6746}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Common.Models", "Shared.Common.Models\Shared.Common.Models.csproj", "{9C93C3A9-BB53-4EF6-B9B9-2B00227FFBC8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Networking", "Shared.Networking\Shared.Networking.csproj", "{6DAAA08C-9968-465C-8E6F-447F7A383EE8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Networking.Advanced", "Shared.Networking.Advanced\Shared.Networking.Advanced.csproj", "{81612B90-63B0-4642-8AB8-8D36184F9595}"
@@ -33,14 +29,6 @@ Global
 		{DF7911E0-0410-4DB8-B964-9FAAD1972E70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF7911E0-0410-4DB8-B964-9FAAD1972E70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF7911E0-0410-4DB8-B964-9FAAD1972E70}.Release|Any CPU.Build.0 = Release|Any CPU
-		{911F8AC1-4648-46B8-A37D-BB48CA4F6746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{911F8AC1-4648-46B8-A37D-BB48CA4F6746}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{911F8AC1-4648-46B8-A37D-BB48CA4F6746}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{911F8AC1-4648-46B8-A37D-BB48CA4F6746}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C93C3A9-BB53-4EF6-B9B9-2B00227FFBC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C93C3A9-BB53-4EF6-B9B9-2B00227FFBC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C93C3A9-BB53-4EF6-B9B9-2B00227FFBC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C93C3A9-BB53-4EF6-B9B9-2B00227FFBC8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6DAAA08C-9968-465C-8E6F-447F7A383EE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6DAAA08C-9968-465C-8E6F-447F7A383EE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DAAA08C-9968-465C-8E6F-447F7A383EE8}.Release|Any CPU.ActiveCfg = Release|Any CPU

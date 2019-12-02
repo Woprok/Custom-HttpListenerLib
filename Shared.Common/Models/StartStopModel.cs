@@ -1,8 +1,7 @@
-﻿using Shared.Common.Exceptions.Exceptions;
-using Shared.Common.Models.Enums;
-using Shared.Common.Models.Interfaces;
+﻿using Shared.Common.Enums;
+using Shared.Common.Interfaces;
 
-namespace Shared.Common.Models.Models
+namespace Shared.Common.Models
 {
     /// <inheritdoc cref="IStartStopModel" />
     /// <inheritdoc cref="ThreadModel" />
@@ -34,8 +33,8 @@ namespace Shared.Common.Models.Models
         protected abstract void OnModelStop();
 
         /// <inheritdoc/>
-        /// <exception cref="InvalidCallException"/>
-        /// <exception cref="UnknownEnumValueException"/>
+        /// <exception cref="Shared.Common.Exceptions.InvalidCallException"/>
+        /// <exception cref="Shared.Common.Exceptions.UnknownEnumValueException"/>
         public void Initialize()
         {
             lock (CriticalAccessLock)
@@ -57,8 +56,8 @@ namespace Shared.Common.Models.Models
         }
 
         /// <inheritdoc/>
-        /// <exception cref="InvalidCallException"/>
-        /// <exception cref="UnknownEnumValueException"/>
+        /// <exception cref="Shared.Common.Exceptions.InvalidCallException"/>
+        /// <exception cref="Shared.Common.Exceptions.UnknownEnumValueException"/>
         public void Start()
         {
             lock (CriticalAccessLock)
@@ -81,8 +80,8 @@ namespace Shared.Common.Models.Models
         }
 
         /// <inheritdoc/>
-        /// <exception cref="InvalidCallException"/>
-        /// <exception cref="UnknownEnumValueException"/>
+        /// <exception cref="Shared.Common.Exceptions.InvalidCallException"/>
+        /// <exception cref="Shared.Common.Exceptions.UnknownEnumValueException"/>
         public void Stop()
         {
             lock (CriticalAccessLock)

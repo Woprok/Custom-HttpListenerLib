@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Shared.Common.Exceptions.Exceptions
+namespace Shared.Common.Exceptions
 {
     /// <summary>
     /// Exception that is invoked if enum was updated to contain additional value, but code where enum was used was not updated accordingly.

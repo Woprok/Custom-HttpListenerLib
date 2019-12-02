@@ -1,7 +1,7 @@
 ﻿using System.Threading;
-using Shared.Common.Exceptions.Exceptions;
+using Shared.Common.Exceptions;
 
-namespace Shared.Common.Models.Models
+namespace Shared.Common.Models
 {
     /// <summary>
     /// Provides base objects and methods for multi-threading and working with async methods.
@@ -19,13 +19,13 @@ namespace Shared.Common.Models.Models
         /// <summary>
         /// Get current CancellationTokenSource instance. 
         /// </summary>
-        /// <exception cref="InvalidCallException">On attempt to get not existing token.</exception>
+        /// <exception cref="Shared.Common.Exceptions.InvalidCallException">On attempt to get not existing token.</exception>
         protected CancellationToken CurrentCancellationToken => tokenSource?.Token ?? throw new InvalidCallException(nameof(CurrentCancellationToken));
 
         /// <summary>
         /// Creates new instance of CancellationTokenSource.
         /// </summary>
-        /// <exception cref="InvalidCallException">On attempt to create new over existing token.</exception>
+        /// <exception cref="Shared.Common.Exceptions.InvalidCallException">On attempt to create new over existing token.</exception>
         protected void CreateToken() => tokenSource = tokenSource == null ? new CancellationTokenSource() : throw new InvalidCallException(nameof(CreateToken));
 
         /// <summary>

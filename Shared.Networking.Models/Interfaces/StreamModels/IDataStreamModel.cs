@@ -11,7 +11,7 @@ namespace Shared.Networking.Models.Interfaces.StreamModels
         /// <summary>
         /// Returns TcpClient currently in use by model.
         /// </summary>
-        TcpClient Client { get; }
+        IClient Client { get; }
 
         /// <summary>
         /// Returns TcpClient data stream.
