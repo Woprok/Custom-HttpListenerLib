@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Net.Sockets;
-
-namespace Shared.Networking.Models.Interfaces
+﻿namespace Shared.Networking.Models.Interfaces.ListenerModels
 {
     /// <summary>
     /// Provides required minimum for server part of connection.

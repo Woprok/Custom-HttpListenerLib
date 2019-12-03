@@ -1,4 +1,6 @@
-﻿namespace Shared.Networking.Models.Interfaces.StreamModels
+﻿using Shared.Networking.Models.Interfaces.ListenerModels;
+
+namespace Shared.Networking.Models.Interfaces.StreamModels
 {
     /// <summary>
     /// Provides shared methods for Sending and Receiving over net.
@@ -8,7 +10,7 @@
         /// <summary>
         /// Returns IClient currently in use by model.
         /// </summary>
-        IClient Client { get; }
+        ISocketClient SocketClient { get; }
 
         /// <summary>
         /// Returns ISerializer currently in use by model.

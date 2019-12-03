@@ -3,6 +3,7 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Shared.Common.Exceptions;
+using Shared.Networking.Models.Interfaces.ListenerModels;
 using Shared.Networking.Models.Interfaces.StreamModels;
 
 namespace Shared.Networking.Models.Models.StreamModels
@@ -15,11 +16,11 @@ namespace Shared.Networking.Models.Models.StreamModels
         /// <inheritdoc/>
         public event DataSentError OnDataSentError;
 
-        public SenderModel(IClient client, ISerializer serializer) : base(client, serializer) { }
+        public SenderModel(ISocketClient socketClient, ISerializer serializer) : base(socketClient, serializer) { }
         
         private async Task Send(ArraySegment<byte> data, CancellationToken token)
         {
-            await Client.SendAsync(data, WebSocketMessageType.Text, token);
+            await SocketClient.SendAsync(data, WebSocketMessageType.Text, token);
         }
 
         /// <inheritdoc/>
@@ -29,7 +30,7 @@ namespace Shared.Networking.Models.Models.StreamModels
             try
             {
                 ArraySegment<byte> serializedData = Serializer.SerializeSendingData(item);
-                if (Client.Connected && !token.IsCancellationRequested)
+                if (SocketClient.Connected && !token.IsCancellationRequested)
                 {
                     await Task.Factory.StartNew(() => Send(serializedData, token), token, TaskCreationOptions.PreferFairness, TaskScheduler.Default);
                     if (OnDataSentSuccess == null)

@@ -3,6 +3,7 @@ using System.Net;
 using Shared.Networking.Models.Interfaces;
 using Shared.Networking.Models.Interfaces.StreamModels;
 using Shared.Networking.Models.Models;
+using Shared.Networking.Models.Models.ListenerModels;
 
 namespace Shared.Networking.Advanced.DataModels
 {

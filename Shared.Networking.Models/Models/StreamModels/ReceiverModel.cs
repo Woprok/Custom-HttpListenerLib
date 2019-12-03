@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Shared.Common.Exceptions;
+using Shared.Networking.Models.Interfaces.ListenerModels;
 using Shared.Networking.Models.Interfaces.StreamModels;
 
 namespace Shared.Networking.Models.Models.StreamModels
@@ -18,7 +19,7 @@ namespace Shared.Networking.Models.Models.StreamModels
         /// <inheritdoc/>
         public event ClientDisconnected OnClientDisconnected;
 
-        public ReceiverModel(IClient client, ISerializer serializer) : base(client, serializer) { }
+        public ReceiverModel(ISocketClient socketClient, ISerializer serializer) : base(socketClient, serializer) { }
 
         /// <inheritdoc/>
         /// <exception cref="EventNotSubscribedException"/>
@@ -26,11 +27,11 @@ namespace Shared.Networking.Models.Models.StreamModels
         {
             try
             {
-                byte[] buffer = new byte[Client.BufferSize];
-                while (Client.Connected && !token.IsCancellationRequested)
+                byte[] buffer = new byte[SocketClient.BufferSize];
+                while (SocketClient.Connected && !token.IsCancellationRequested)
                 {
                     object deserializedObject;
-                    string content = await Client.ReceiveAsync();
+                    string content = await SocketClient.ReceiveAsync();
 
                     if (string.IsNullOrEmpty(content))
                     {

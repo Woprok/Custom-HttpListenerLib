@@ -50,11 +50,13 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IConnector.cs" />
+    <Compile Include="Interfaces\ListenerModels\IConnector.cs" />
     <Compile Include="Interfaces\IDataModel.cs" />
     <Compile Include="Interfaces\IGenericDataModel.cs" />
     <Compile Include="Interfaces\ISendReceiveModel.cs" />
-    <Compile Include="Interfaces\IServerModel.cs" />
+    <Compile Include="Interfaces\ListenerModels\IServerModel.cs" />
+    <Compile Include="Interfaces\ListenerModels\ISocketClient.cs" />
+    <Compile Include="Interfaces\ListenerModels\IListener.cs" />
     <Compile Include="Interfaces\StreamModels\IDataStreamModel.cs" />
     <Compile Include="Interfaces\StreamModels\IReceiver.cs" />
     <Compile Include="Interfaces\StreamModels\ISender.cs" />
@@ -62,8 +64,10 @@
     <Compile Include="Interfaces\StreamModels\ISerializer.cs" />
     <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\GenericDataModel.cs" />
+    <Compile Include="Models\ListenerModels\ExtendedHttpListener.cs" />
+    <Compile Include="Models\ListenerModels\SocketClient.cs" />
     <Compile Include="Models\SendReceiveModel.cs" />
-    <Compile Include="Models\ServerModel.cs" />
+    <Compile Include="Models\ListenerModels\ServerModel.cs" />
     <Compile Include="Models\StreamModels\DataStreamModel.cs" />
     <Compile Include="Models\StreamModels\JsonSerializer.cs" />
     <Compile Include="Models\StreamModels\ReceiverModel.cs" />
@@ -74,10 +78,6 @@
     <ProjectReference Include="..\Shared.Common\Shared.Common.csproj">
       <Project>{DF7911E0-0410-4DB8-B964-9FAAD1972E70}</Project>
       <Name>Shared.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Shared.Networking\Shared.Networking.csproj">
-      <Project>{6DAAA08C-9968-465C-8E6F-447F7A383EE8}</Project>
-      <Name>Shared.Networking</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

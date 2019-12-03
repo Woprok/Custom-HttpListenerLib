@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Shared.Common.Models;
 using Shared.Networking.Models.Interfaces;
+using Shared.Networking.Models.Interfaces.ListenerModels;
 using Shared.Networking.Models.Interfaces.StreamModels;
 using Shared.Networking.Models.Models.StreamModels;
 
@@ -19,10 +20,10 @@ namespace Shared.Networking.Models.Models
         /// <inheritdoc/>
         public event SendReceiveModelDataReceived<object> OnSendReceiveModelDataReceived;
 
-        public SendReceiveModel(long id, IClient client, ISerializer serializer)
+        public SendReceiveModel(long id, ISocketClient socketClient, ISerializer serializer)
         {
             Id = id;
-            Client = client;
+            SocketClient = socketClient;
             Serializer = serializer;
         }
 
@@ -30,7 +31,7 @@ namespace Shared.Networking.Models.Models
         public long Id { get; }
 
         /// <inheritdoc/>
-        public IClient Client { get; }
+        public ISocketClient SocketClient { get; }
         
         /// <inheritdoc/>
         public IReceiver Receiver { get; private set; }
@@ -42,7 +43,7 @@ namespace Shared.Networking.Models.Models
         public bool IsValidated { get; set; } = true;
 
         /// <inheritdoc/>
-        public bool IsValidConnection => IsValidated && Client.Connected;
+        public bool IsValidConnection => IsValidated && SocketClient.Connected;
 
         /// <inheritdoc/>
         public ISerializer Serializer { get; }
@@ -50,8 +51,8 @@ namespace Shared.Networking.Models.Models
         /// <inheritdoc/>
         protected override void OnModelInitialize()
         {
-            Receiver = new ReceiverModel(Client, Serializer);
-            Sender = new SenderModel(Client, Serializer);
+            Receiver = new ReceiverModel(SocketClient, Serializer);
+            Sender = new SenderModel(SocketClient, Serializer);
         }
         
         /// <inheritdoc/>
@@ -87,7 +88,7 @@ namespace Shared.Networking.Models.Models
             Sender.OnDataSentSuccess -= SenderOnDataSent;
             Sender.OnDataSentError -= SenderOnDataSentError;
             Serializer.OnSerializerError -= SerializerOnSerializerError;
-            Client.Close();
+            SocketClient.Close();
         }
         
         /// <inheritdoc/>

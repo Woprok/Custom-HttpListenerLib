@@ -1,4 +1,5 @@
 ﻿using Shared.Common.Interfaces;
+using Shared.Networking.Models.Interfaces.ListenerModels;
 using Shared.Networking.Models.Interfaces.StreamModels;
 
 namespace Shared.Networking.Models.Interfaces
@@ -55,8 +56,8 @@ namespace Shared.Networking.Models.Interfaces
         /// </summary>
         long Id { get; }
 
-        /// <inheritdoc cref="IClient"/>
-        IClient Client { get; }
+        /// <inheritdoc cref="ISocketClient"/>
+        ISocketClient SocketClient { get; }
 
         /// <inheritdoc cref="IReceiver"/>
         IReceiver Receiver { get; }

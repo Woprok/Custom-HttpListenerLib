@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Shared.Common.Enums;
 using Shared.Common.Exceptions;
 using Shared.Common.Models;
-using Shared.Networking.Models.Interfaces;
+using Shared.Networking.Models.Interfaces.ListenerModels;
 
-namespace Shared.Networking.Models.Models
+namespace Shared.Networking.Models.Models.ListenerModels
 {
     /// <inheritdoc cref="StartStopModel"/>
     /// <inheritdoc cref="IServerModel"/>
@@ -52,9 +52,9 @@ namespace Shared.Networking.Models.Models
         {
             while (InternalModelState == ModelState.Started && !token.IsCancellationRequested)
             {
-                IClient obtainedClient = await Listener.ProcessClientRequest(token);
+                ISocketClient obtainedSocketClient = await Listener.ProcessClientRequest(token);
 
-                if (obtainedClient == null) //It is not socket
+                if (obtainedSocketClient == null) //It is not socket
                     continue;
 
                 if (token.IsCancellationRequested || InternalModelState == ModelState.Stopped)
@@ -62,7 +62,7 @@ namespace Shared.Networking.Models.Models
 
                 if (OnNewClient == null)
                     throw new EventNotSubscribedException(nameof(AcceptConnectionAsync));
-                await Task.Run(() => OnNewClient?.Invoke(obtainedClient), CurrentCancellationToken);
+                await Task.Run(() => OnNewClient?.Invoke(obtainedSocketClient), CurrentCancellationToken);
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading;
 using Shared.Common.Extensions;
 using Shared.Networking.Models.Interfaces;
+using Shared.Networking.Models.Interfaces.ListenerModels;
 using Shared.Networking.Models.Interfaces.StreamModels;
 
 namespace Shared.Networking.Models.Models
@@ -108,7 +109,7 @@ namespace Shared.Networking.Models.Models
             }
         }
 
-        private void IncludeNewClientHandler(IClient newclient)
+        private void IncludeNewClientHandler(ISocketClient newclient)
         {
             newclient.BufferSize = BufferSize;
             SendReceiveModel exchanger = new SendReceiveModel(idHolder.NewId, newclient, Serializer);
