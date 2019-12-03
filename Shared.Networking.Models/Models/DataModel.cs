@@ -11,7 +11,7 @@ namespace Shared.Networking.Models.Models
         protected const int DefaultBufferSize = 1024 * 16;
 
         protected DataModel() : base() { }
-        protected DataModel(IPEndPoint ipEndPoint, int defaultBufferSize = DefaultBufferSize) : this()
+        protected DataModel(string ipEndPoint, int defaultBufferSize = DefaultBufferSize) : this()
         {
             IpEndPoint = ipEndPoint;
             BufferSize = defaultBufferSize;
@@ -21,6 +21,6 @@ namespace Shared.Networking.Models.Models
         public int BufferSize { get; } = DefaultBufferSize;
         
         /// <inheritdoc/>
-        public IPEndPoint IpEndPoint { get; }
+        public string IpEndPoint { get; }
     }
 }

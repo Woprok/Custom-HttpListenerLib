@@ -13,10 +13,10 @@ namespace Shared.Networking.Models.Models.ListenerModels
     {
         private readonly HttpListener httpListener;
 
-        public ExtendedHttpListener(IPEndPoint endPoint)
+        public ExtendedHttpListener(string endPoint)
         {
             httpListener =  new HttpListener();
-            httpListener.Prefixes.Add(endPoint.ToString());
+            httpListener.Prefixes.Add(endPoint);
         }
 
         public void Start() => httpListener.Start();
@@ -28,6 +28,7 @@ namespace Shared.Networking.Models.Models.ListenerModels
 
             if (hc.Request.IsWebSocketRequest)
             {
+
                 HttpListenerWebSocketContext ws = await hc.AcceptWebSocketAsync(null);
                 
                 return new SocketClient(ws.WebSocket);

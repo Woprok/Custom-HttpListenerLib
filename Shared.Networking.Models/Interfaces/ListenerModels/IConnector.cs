@@ -19,6 +19,6 @@ namespace Shared.Networking.Models.Interfaces.ListenerModels
         event ClientObtained OnNewClient;
 
         /// <inheritdoc cref="IPEndPoint"/>
-        IPEndPoint IpEndPoint { get; set; }
+        string IpEndPoint { get; set; }
     }
 }

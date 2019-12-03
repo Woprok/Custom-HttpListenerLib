@@ -49,5 +49,15 @@
   <ItemGroup>
     <Content Include="Client.html" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shared.Networking.Advanced\Shared.Networking.Demo.csproj">
+      <Project>{81612b90-63b0-4642-8ab8-8d36184f9595}</Project>
+      <Name>Shared.Networking.Demo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shared.Networking.Models\Shared.Networking.Models.csproj">
+      <Project>{BDA4C682-0C92-463C-93A5-426DDE187CAB}</Project>
+      <Name>Shared.Networking.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

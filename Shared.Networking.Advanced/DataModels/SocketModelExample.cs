@@ -13,7 +13,7 @@ namespace Shared.Networking.Advanced.DataModels
     /// </summary>
     public class SocketModelExample : GenericDataModel<ServerModel>
     {
-        public SocketModelExample(IPEndPoint ipEndPoint, ISerializer serializer, int defaultBufferSize = DefaultBufferSize, bool autorun = true) 
+        public SocketModelExample(string ipEndPoint, ISerializer serializer, int defaultBufferSize = DefaultBufferSize, bool autorun = true) 
             : base(ipEndPoint, serializer, defaultBufferSize, autorun) { }
         
         public override void DataExchangerDataReceived(ISendReceiveModel exchangerModel, object data)

@@ -13,6 +13,6 @@ namespace Shared.Networking.Models.Interfaces
         int BufferSize { get; }
 
         /// <inheritdoc cref="IPEndPoint"/>
-        IPEndPoint IpEndPoint { get; }
+        string IpEndPoint { get; }
     }
 }

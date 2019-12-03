@@ -53,7 +53,7 @@ namespace Shared.Networking.Models.Models
         /// Default constructor calls StartRunning();
         /// Can be opted out by calling it will autorun = false
         /// </summary>>
-        protected GenericDataModel(IPEndPoint ipEndPoint, ISerializer serializer, int defaultBufferSize = DefaultBufferSize, bool autorun = true) : base(ipEndPoint, defaultBufferSize)
+        protected GenericDataModel(string ipEndPoint, ISerializer serializer, int defaultBufferSize = DefaultBufferSize, bool autorun = true) : base(ipEndPoint, defaultBufferSize)
         {
             Serializer = serializer;
             if (autorun)

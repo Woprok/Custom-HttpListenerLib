@@ -17,13 +17,13 @@ namespace Shared.Networking.Models.Models.ListenerModels
 
         public ServerModel() : base() { }
 
-        public ServerModel(IPEndPoint ipEndPoint) : this()
+        public ServerModel(string ipEndPoint) : this()
         {
             IpEndPoint = ipEndPoint;
         }
 
         /// <inheritdoc/>
-        public IPEndPoint IpEndPoint { get; set; }
+        public string IpEndPoint { get; set; }
 
         /// <inheritdoc/>
         public IListener Listener { get; private set; }
