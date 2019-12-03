@@ -1,5 +1,4 @@
-﻿using System.Net.Sockets;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Shared.Common.Models;
 using Shared.Networking.Models.Interfaces;
 using Shared.Networking.Models.Interfaces.StreamModels;
@@ -12,11 +11,11 @@ namespace Shared.Networking.Models.Models
     public sealed class SendReceiveModel : StartStopModel, ISendReceiveModel
     {
         /// <inheritdoc/>
-        public event SendReceiveModelDisconnected<object> OnSendReceiveModelDisconnected;
-
+        public event SendReceiveModelDisconnected OnSendReceiveModelDisconnected;
+        /// <inheritdoc/>
+        public event SendReceiveModelError OnSendReceiveModelError;
         /// <inheritdoc/>
         public event SendReceiveModelDataSent<object> OnSendReceiveModelDataSent;
-
         /// <inheritdoc/>
         public event SendReceiveModelDataReceived<object> OnSendReceiveModelDataReceived;
 
@@ -40,7 +39,7 @@ namespace Shared.Networking.Models.Models
         public ISender Sender { get; private set; }
 
         /// <inheritdoc/>
-        public bool IsValidated { get; set; } = false;
+        public bool IsValidated { get; set; } = true;
 
         /// <inheritdoc/>
         public bool IsValidConnection => IsValidated && Client.Connected;
@@ -58,28 +57,40 @@ namespace Shared.Networking.Models.Models
         /// <inheritdoc/>
         protected override void OnModelStart()
         {
-            Receiver.OnClientDisconnected += Receiver_OnClientDisconnected;
+            Receiver.OnClientDisconnected += ReceiverOnClientDisconnected;
             Receiver.OnDataReceivedSuccess += ReceiverOnDataReceivedSuccess;
-            Sender.OnDataSentSuccess += Sender_OnDataSent;
+            Receiver.OnDataReceivedError += ReceiverOnDataReceivedError;
+            Sender.OnDataSentSuccess += SenderOnDataSent;
+            Sender.OnDataSentError += SenderOnDataSentError;
+            Serializer.OnSerializerError += SerializerOnSerializerError;
             Task.Factory.StartNew(() => Receiver.ReceiveAsync(CurrentCancellationToken), CurrentCancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
 
-        private void Sender_OnDataSent(ISender sender, object data) => OnSendReceiveModelDataSent?.Invoke(this, data);
+        private void SerializerOnSerializerError(ISerializer sender, System.Exception e, object context) => OnSendReceiveModelError?.Invoke(this);
+
+        private void SenderOnDataSentError(ISender sender, System.Exception e, object data) => OnSendReceiveModelError?.Invoke(this);
+
+        private void ReceiverOnDataReceivedError(IReceiver receiver, System.Exception e) => OnSendReceiveModelError?.Invoke(this);
+
+        private void SenderOnDataSent(ISender sender, object data) => OnSendReceiveModelDataSent?.Invoke(this, data);
 
         private void ReceiverOnDataReceivedSuccess(IReceiver receiver, object data) => OnSendReceiveModelDataReceived?.Invoke(this, data);
 
-        private void Receiver_OnClientDisconnected(IReceiver receiver) => OnSendReceiveModelDisconnected?.Invoke(this);
+        private void ReceiverOnClientDisconnected(IReceiver receiver) => OnSendReceiveModelDisconnected?.Invoke(this);
 
         /// <inheritdoc/>
         protected override void OnModelStop()
         {
-            Receiver.OnClientDisconnected -= Receiver_OnClientDisconnected;
+            Receiver.OnClientDisconnected -= ReceiverOnClientDisconnected;
             Receiver.OnDataReceivedSuccess -= ReceiverOnDataReceivedSuccess;
-            Sender.OnDataSentSuccess -= Sender_OnDataSent;
+            Receiver.OnDataReceivedError -= ReceiverOnDataReceivedError;
+            Sender.OnDataSentSuccess -= SenderOnDataSent;
+            Sender.OnDataSentError -= SenderOnDataSentError;
+            Serializer.OnSerializerError -= SerializerOnSerializerError;
             Client.Close();
         }
         
         /// <inheritdoc/>
-        public void Send(object obj) => Task.Run(() => Sender.SendAsync(obj, CurrentCancellationToken));
+        public void Send(object item) => Task.Run(() => Sender.SendAsync(item, CurrentCancellationToken));
     }
 }

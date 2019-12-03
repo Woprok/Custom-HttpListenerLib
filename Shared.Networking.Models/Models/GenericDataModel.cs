@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Net;
-using System.Net.Sockets;
 using System.Threading;
 using Shared.Common.Extensions;
 using Shared.Networking.Models.Interfaces;
@@ -11,8 +9,8 @@ using Shared.Networking.Models.Interfaces.StreamModels;
 namespace Shared.Networking.Models.Models
 {
     /// <inheritdoc cref="DataModel"/>
-    /// <inheritdoc cref="IGenericDataModel{T,TConnector}"/>
-    public abstract class GenericDataModel<T, TConnector> : DataModel, IGenericDataModel<T, TConnector> where TConnector : class, IConnector, new()
+    /// <inheritdoc cref="IGenericDataModel{TConnector}"/>
+    public abstract class GenericDataModel<TConnector> : DataModel, IGenericDataModel<TConnector> where TConnector : class, IConnector, new()
     {
         private readonly IdHolder idHolder = new IdHolder();
         
@@ -104,6 +102,7 @@ namespace Shared.Networking.Models.Models
                     exchanger.OnSendReceiveModelDataReceived -= DataExchangerDataReceived;
                     exchanger.OnSendReceiveModelDataSent -= DataExchangerDataSent;
                     exchanger.OnSendReceiveModelDisconnected -= DataExchangerDisconnected;
+                    exchanger.OnSendReceiveModelError -= DataExchangerError;
                 });
                 DataExchangers.Clear();
             }
@@ -111,13 +110,13 @@ namespace Shared.Networking.Models.Models
 
         private void IncludeNewClientHandler(IClient newclient)
         {
-            newclient.ReceiveBufferSize = BufferSize;
-            newclient.SendBufferSize = BufferSize;
+            newclient.BufferSize = BufferSize;
             SendReceiveModel exchanger = new SendReceiveModel(idHolder.NewId, newclient, Serializer);
             exchanger.Initialize();
             exchanger.OnSendReceiveModelDataReceived += DataExchangerDataReceived;
             exchanger.OnSendReceiveModelDataSent += DataExchangerDataSent;
             exchanger.OnSendReceiveModelDisconnected += DataExchangerDisconnected;
+            exchanger.OnSendReceiveModelError += DataExchangerError;
             exchanger.Start();
 
             lock (SynchronizedDataExchangersAccess)
@@ -125,7 +124,7 @@ namespace Shared.Networking.Models.Models
                 DataExchangers.Add(exchanger.Id, exchanger);
             }
         }
-
+        
         /// <inheritdoc/>
         public ImmutableDictionary<long, ISendReceiveModel> GetExchangers()
         {
@@ -154,7 +153,7 @@ namespace Shared.Networking.Models.Models
         }
 
         /// <inheritdoc/>
-        public void SendToAllValidConnections(T message)
+        public void SendToAllValidConnections(object message)
         {
             lock (SynchronizedDataExchangersAccess)
             {
@@ -163,7 +162,7 @@ namespace Shared.Networking.Models.Models
         }
 
         /// <inheritdoc/>
-        public void SendToAll(T message)
+        public void SendToAll(object message)
         {
             lock (SynchronizedDataExchangersAccess)
             {
@@ -183,6 +182,7 @@ namespace Shared.Networking.Models.Models
             exchangerModel.OnSendReceiveModelDataReceived -= DataExchangerDataReceived;
             exchangerModel.OnSendReceiveModelDataSent -= DataExchangerDataSent;
             exchangerModel.OnSendReceiveModelDisconnected -= DataExchangerDisconnected;
+            exchangerModel.OnSendReceiveModelError -= DataExchangerError;
 
             lock (SynchronizedDataExchangersAccess)
             {
@@ -191,10 +191,13 @@ namespace Shared.Networking.Models.Models
         }
 
         /// <inheritdoc/>
-        public virtual void DataExchangerDataSent(ISendReceiveModel sender, T data) { }
+        public virtual void DataExchangerDataSent(ISendReceiveModel sender, object data) { }
 
         /// <inheritdoc/>
-        public virtual void DataExchangerDataReceived(ISendReceiveModel exchangerModel, T data) { }
+        public virtual void DataExchangerDataReceived(ISendReceiveModel exchangerModel, object data) { }
+
+        /// <inheritdoc/>
+        public virtual void DataExchangerError(ISendReceiveModel receiver) { }
 
         /// <inheritdoc/>
         public void StartRunning()

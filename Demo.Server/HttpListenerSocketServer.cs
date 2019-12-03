@@ -30,10 +30,11 @@ namespace Demo.Server
 
                 Console.WriteLine("Request: " + hc.Request.Headers.AllKeys);
                 Console.WriteLine("Response: " + hc.Response.StatusCode);
-
+                
                 if (hc.Request.HttpMethod == "GET")
                 {
                     Console.WriteLine(hc.Request.Url);
+                    
                 }
 
                 if (!hc.Request.IsWebSocketRequest)

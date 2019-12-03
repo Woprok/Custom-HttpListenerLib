@@ -1,5 +1,4 @@
-﻿using System.Net.Sockets;
-using Shared.Common.Interfaces;
+﻿using Shared.Common.Interfaces;
 using Shared.Networking.Models.Interfaces.StreamModels;
 
 namespace Shared.Networking.Models.Interfaces
@@ -7,7 +6,12 @@ namespace Shared.Networking.Models.Interfaces
     /// <summary>
     /// Default event for publishing client disconnected status.
     /// </summary>
-    public delegate void SendReceiveModelDisconnected<T>(ISendReceiveModel receiver);
+    public delegate void SendReceiveModelDisconnected(ISendReceiveModel receiver);
+
+    /// <summary>
+    /// Default event for publishing client error status.
+    /// </summary>
+    public delegate void SendReceiveModelError(ISendReceiveModel receiver);
 
     /// <summary>
     /// Default event for publishing sent data.
@@ -29,7 +33,12 @@ namespace Shared.Networking.Models.Interfaces
         /// <summary>
         /// Subscribe-able event used for obtaining client disconnected status.
         /// </summary>
-        event SendReceiveModelDisconnected<object> OnSendReceiveModelDisconnected;
+        event SendReceiveModelDisconnected OnSendReceiveModelDisconnected;
+
+        /// <summary>
+        /// Subscribe-able event used for obtaining client error status.
+        /// </summary>
+        event SendReceiveModelError OnSendReceiveModelError;
         
         /// <summary>
         /// Subscribe-able event for sent data.
@@ -59,7 +68,7 @@ namespace Shared.Networking.Models.Interfaces
         /// Method for sending object of type T.
         /// Implementation of this function should be async.
         /// </summary>
-        void Send(object obj);
+        void Send(object item);
 
         /// <summary>
         /// Holds information about authentication.

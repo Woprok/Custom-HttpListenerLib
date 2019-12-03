@@ -13,30 +13,28 @@ namespace Shared.Networking
     /// </summary>
     public interface IClient
     {
-        Stream GetStream();
-        bool Connected { get; set; }
-        int ReceiveBufferSize { get; set; }
-        int SendBufferSize { get; set; }
+        bool Connected { get; }
+        int BufferSize { get; set; }
         void Close();
         Task SendAsync(ArraySegment<byte> buffer, WebSocketMessageType messageType, CancellationToken cancellationToken);
         Task<string> ReceiveAsync();
     }
 
-    public class SimpleClient : IClient
+    public class SocketClient : IClient
     {
-        private readonly WebSocket socket;
-
-        public Stream GetStream()
+        public SocketClient(WebSocket socket)
         {
-            throw new System.NotImplementedException();
+            this.socket = socket;
         }
 
-        public bool Connected { get; set; }
-        public int ReceiveBufferSize { get; set; }
-        public int SendBufferSize { get; set; }
+        private readonly WebSocket socket;
+
+        public bool Connected => socket.State == WebSocketState.Open;
+        public int BufferSize { get; set; } = 1024 * 16;
+
         public void Close()
         {
-            throw new System.NotImplementedException();
+            socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Initiated Close", CancellationToken.None);
         }
 
         public async Task SendAsync(ArraySegment<byte> buffer, WebSocketMessageType messageType, CancellationToken cancellationToken)
@@ -46,7 +44,7 @@ namespace Shared.Networking
 
         public async Task<string> ReceiveAsync()
         {
-            ArraySegment<byte> buffer = new ArraySegment<byte>(new byte[ReceiveBufferSize]);
+            ArraySegment<byte> buffer = new ArraySegment<byte>(new byte[BufferSize]);
             WebSocketReceiveResult result = null;
             
             using (MemoryStream dataMemoryStream = new MemoryStream())
@@ -84,9 +82,9 @@ namespace Shared.Networking
         /// </summary>
         void Stop();
         /// <summary>
-        /// Provides new client instance.
+        /// Provides new client instance or null if it is not socket.
         /// </summary>
-        IClient AcceptClientAsync();
+        Task<IClient> ProcessClientRequest(CancellationToken token);
     }
 
     /// <summary>
@@ -94,14 +92,35 @@ namespace Shared.Networking
     /// </summary>
     public class ExtendedHttpListener : IListener
     {
+        private readonly int buffer;
         private readonly HttpListener httpListener;
-        public ExtendedHttpListener(IPEndPoint endPoint)
+
+        public ExtendedHttpListener(IPEndPoint endPoint, int buffer)
         {
+            this.buffer = buffer;
             httpListener =  new HttpListener();
+            httpListener.Prefixes.Add(endPoint.ToString());
         }
 
         public void Start() => httpListener.Start();
         public void Stop() => httpListener.Stop();
-        public IClient AcceptClientAsync() => null;
+
+        public async Task<IClient> ProcessClientRequest(CancellationToken token)
+        {
+            HttpListenerContext hc = await httpListener.GetContextAsync();
+
+            if (hc.Request.IsWebSocketRequest)
+            {
+                HttpListenerWebSocketContext ws = await hc.AcceptWebSocketAsync(null);
+                
+                return new SocketClient(ws.WebSocket);
+            }
+            else if (hc.Request.HttpMethod == "GET")
+            {
+
+            }
+
+            return null;
+        }
     }
 }

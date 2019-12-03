@@ -26,7 +26,7 @@ namespace Shared.Networking.Models.Models.StreamModels
         {
             try
             {
-                byte[] buffer = new byte[Client.ReceiveBufferSize];
+                byte[] buffer = new byte[Client.BufferSize];
                 while (Client.Connected && !token.IsCancellationRequested)
                 {
                     object deserializedObject;

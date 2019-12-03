@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Shared.Common.Enums;
@@ -53,7 +52,10 @@ namespace Shared.Networking.Models.Models
         {
             while (InternalModelState == ModelState.Started && !token.IsCancellationRequested)
             {
-                IClient obtainedClient = await Task.Run(Listener.AcceptClientAsync, token);
+                IClient obtainedClient = await Listener.ProcessClientRequest(token);
+
+                if (obtainedClient == null) //It is not socket
+                    continue;
 
                 if (token.IsCancellationRequested || InternalModelState == ModelState.Stopped)
                     return;
