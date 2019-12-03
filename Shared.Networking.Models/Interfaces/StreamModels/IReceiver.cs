@@ -1,13 +1,17 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Shared.Networking.Models.Interfaces.StreamModels
 {
     /// <summary>
-    /// Default event for publishing received data.
+    /// Default event for publishing received data on success.
     /// </summary>
-    public delegate void DataReceived<T>(IReceiver receiver, T data);
-
+    public delegate void DataReceivedSuccess(IReceiver receiver, object data);
+    /// <summary>
+    /// Default event for publishing received data on failure.
+    /// </summary>
+    public delegate void DataReceivedError(IReceiver receiver, Exception e);
     /// <summary>
     /// Default event for publishing client disconnected status.
     /// </summary>
@@ -21,7 +25,11 @@ namespace Shared.Networking.Models.Interfaces.StreamModels
         /// <summary>
         /// Subscribe-able event used to obtain received data.
         /// </summary>
-        event DataReceived<object> OnDataReceived;
+        event DataReceivedSuccess OnDataReceivedSuccess;
+        /// <summary>
+        /// Subscribe-able event used to obtain information about failed received data.
+        /// </summary>
+        event DataReceivedError OnDataReceivedError;
 
         /// <summary>
         /// Subscribe-able event used for obtaining client disconnected status.

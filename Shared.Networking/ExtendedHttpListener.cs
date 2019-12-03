@@ -19,7 +19,7 @@ namespace Shared.Networking
         int SendBufferSize { get; set; }
         void Close();
         Task SendAsync(ArraySegment<byte> buffer, WebSocketMessageType messageType, CancellationToken cancellationToken);
-        string ReceiveAsync();
+        Task<string> ReceiveAsync();
     }
 
     public class SimpleClient : IClient
@@ -44,10 +44,11 @@ namespace Shared.Networking
             await socket.SendAsync(buffer, messageType, true, cancellationToken);
         }
 
-        public async string ReceiveAsync()
+        public async Task<string> ReceiveAsync()
         {
             ArraySegment<byte> buffer = new ArraySegment<byte>(new byte[ReceiveBufferSize]);
             WebSocketReceiveResult result = null;
+            
             using (MemoryStream dataMemoryStream = new MemoryStream())
             {
                 do
@@ -56,10 +57,15 @@ namespace Shared.Networking
                     dataMemoryStream.Write(buffer.Array, buffer.Offset, result.Count);
                 }
                 while (!result.EndOfMessage);
-                dataMemoryStream.Position = 0;
 
-                using StreamReader reader = new StreamReader(dataMemoryStream, Encoding.UTF8);
-                return await reader.ReadToEndAsync();
+                if (result.MessageType == WebSocketMessageType.Close)
+                    return null;
+
+                dataMemoryStream.Position = 0;
+                using (StreamReader reader = new StreamReader(dataMemoryStream, Encoding.UTF8))
+                {
+                    return await reader.ReadToEndAsync();
+                }
             }
         }
     }

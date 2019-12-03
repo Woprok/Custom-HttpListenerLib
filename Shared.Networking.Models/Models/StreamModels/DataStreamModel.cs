@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Net.Sockets;
-using Shared.Networking.Models.Interfaces;
-using Shared.Networking.Models.Interfaces.StreamModels;
+﻿using Shared.Networking.Models.Interfaces.StreamModels;
 
 namespace Shared.Networking.Models.Models.StreamModels
 {
@@ -19,8 +16,5 @@ namespace Shared.Networking.Models.Models.StreamModels
 
         /// <inheritdoc/>
         public ISerializer Serializer { get; }
-
-        /// <inheritdoc/>
-        public bool IsConnected => Client.Connected;
     }
 }

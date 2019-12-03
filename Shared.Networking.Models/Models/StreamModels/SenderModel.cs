@@ -11,7 +11,9 @@ namespace Shared.Networking.Models.Models.StreamModels
     public sealed class SenderModel : DataStreamModel, ISender
     {
         /// <inheritdoc/>
-        public event DataSent<object> OnDataSent;
+        public event DataSentSuccess OnDataSentSuccess;
+        /// <inheritdoc/>
+        public event DataSentError OnDataSentError;
 
         public SenderModel(IClient client, ISerializer serializer) : base(client, serializer) { }
         
@@ -24,14 +26,22 @@ namespace Shared.Networking.Models.Models.StreamModels
         /// <exception cref="EventNotSubscribedException"/>
         public async Task SendAsync<TE>(TE item, CancellationToken token)
         {
-            ArraySegment<byte> serializedData = Serializer.SerializeSendingData(item);
-
-            if (IsConnected && !token.IsCancellationRequested)
+            try
             {
-                await Task.Factory.StartNew(() => Send(serializedData, token), token, TaskCreationOptions.PreferFairness, TaskScheduler.Default);
-                if (OnDataSent == null)
-                    throw new EventNotSubscribedException("Sent method not subscribed!");
-                await Task.Run(() => OnDataSent?.Invoke(this, item), token);
+                ArraySegment<byte> serializedData = Serializer.SerializeSendingData(item);
+                if (Client.Connected && !token.IsCancellationRequested)
+                {
+                    await Task.Factory.StartNew(() => Send(serializedData, token), token, TaskCreationOptions.PreferFairness, TaskScheduler.Default);
+                    if (OnDataSentSuccess == null)
+                        throw new EventNotSubscribedException("Sent success method not subscribed!");
+                    await Task.Run(() => OnDataSentSuccess?.Invoke(this, item), token);
+                }
+            }
+            catch (Exception e)
+            {
+                if (OnDataSentError == null)
+                    throw new EventNotSubscribedException("Sent error method not subscribed!");
+                await Task.Run(() => OnDataSentError?.Invoke(this, e, item), token);
             }
         }
     }

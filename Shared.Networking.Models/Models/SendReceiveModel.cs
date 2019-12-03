@@ -7,18 +7,18 @@ using Shared.Networking.Models.Models.StreamModels;
 
 namespace Shared.Networking.Models.Models
 {
-    /// <inheritdoc cref="ISendReceiveModel{T}"/>
+    /// <inheritdoc cref="ISendReceiveModel"/>
     /// <inheritdoc cref="StartStopModel"/>
-    public sealed class SendReceiveModel<T> : StartStopModel, ISendReceiveModel<T>
+    public sealed class SendReceiveModel : StartStopModel, ISendReceiveModel
     {
         /// <inheritdoc/>
-        public event SendReceiveModelDisconnected<T> OnSendReceiveModelDisconnected;
+        public event SendReceiveModelDisconnected<object> OnSendReceiveModelDisconnected;
 
         /// <inheritdoc/>
-        public event SendReceiveModelDataSent<T> OnSendReceiveModelDataSent;
+        public event SendReceiveModelDataSent<object> OnSendReceiveModelDataSent;
 
         /// <inheritdoc/>
-        public event SendReceiveModelDataReceived<T> OnSendReceiveModelDataReceived;
+        public event SendReceiveModelDataReceived<object> OnSendReceiveModelDataReceived;
 
         public SendReceiveModel(long id, IClient client, ISerializer serializer)
         {
@@ -59,14 +59,14 @@ namespace Shared.Networking.Models.Models
         protected override void OnModelStart()
         {
             Receiver.OnClientDisconnected += Receiver_OnClientDisconnected;
-            Receiver.OnDataReceived += Receiver_OnDataReceived;
-            Sender.OnDataSent += Sender_OnDataSent;
+            Receiver.OnDataReceivedSuccess += ReceiverOnDataReceivedSuccess;
+            Sender.OnDataSentSuccess += Sender_OnDataSent;
             Task.Factory.StartNew(() => Receiver.ReceiveAsync(CurrentCancellationToken), CurrentCancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
 
-        private void Sender_OnDataSent(ISender sender, T data) => OnSendReceiveModelDataSent?.Invoke(this, data);
+        private void Sender_OnDataSent(ISender sender, object data) => OnSendReceiveModelDataSent?.Invoke(this, data);
 
-        private void Receiver_OnDataReceived(IReceiver receiver, T data) => OnSendReceiveModelDataReceived?.Invoke(this, data);
+        private void ReceiverOnDataReceivedSuccess(IReceiver receiver, object data) => OnSendReceiveModelDataReceived?.Invoke(this, data);
 
         private void Receiver_OnClientDisconnected(IReceiver receiver) => OnSendReceiveModelDisconnected?.Invoke(this);
 
@@ -74,12 +74,12 @@ namespace Shared.Networking.Models.Models
         protected override void OnModelStop()
         {
             Receiver.OnClientDisconnected -= Receiver_OnClientDisconnected;
-            Receiver.OnDataReceived -= Receiver_OnDataReceived;
-            Sender.OnDataSent -= Sender_OnDataSent;
+            Receiver.OnDataReceivedSuccess -= ReceiverOnDataReceivedSuccess;
+            Sender.OnDataSentSuccess -= Sender_OnDataSent;
             Client.Close();
         }
         
         /// <inheritdoc/>
-        public void Send(T obj) => Task.Run(() => Sender.SendAsync(obj, CurrentCancellationToken));
+        public void Send(object obj) => Task.Run(() => Sender.SendAsync(obj, CurrentCancellationToken));
     }
 }

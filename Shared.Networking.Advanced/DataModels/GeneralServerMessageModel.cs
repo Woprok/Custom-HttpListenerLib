@@ -11,24 +11,23 @@ namespace Shared.Networking.Advanced.DataModels
     /// Model that controls and coordinates receiving and sending of the messages.
     /// Responsible for parsing and wrapping data by message type.
     /// </summary>
-    public class GeneralServerMessageModel : GenericDataModel<CoreMessage, ServerModel>
+    public class GeneralServerMessageModel : GenericDataModel<object, ServerModel>
     {
-        public GeneralServerMessageModel(IPEndPoint ipEndPoint, ISerializer<CoreMessage> serializer, int defaultBufferSize = DefaultBufferSize, bool autorun = true) : base(ipEndPoint, serializer, defaultBufferSize, autorun)
-        {
-        }
+        public GeneralServerMessageModel(IPEndPoint ipEndPoint, ISerializer serializer, int defaultBufferSize = DefaultBufferSize, bool autorun = true) 
+            : base(ipEndPoint, serializer, defaultBufferSize, autorun) { }
         
-        public override void DataExchangerDataReceived(ISendReceiveModel<CoreMessage> exchangerModel, CoreMessage data)
+        public override void DataExchangerDataReceived(ISendReceiveModel exchangerModel, CoreMessage data)
         {
             Console.WriteLine(data);
             base.DataExchangerDataReceived(exchangerModel, data);
         }
 
-        public override void DataExchangerDataSent(ISendReceiveModel<CoreMessage> sender, CoreMessage data)
+        public override void DataExchangerDataSent(ISendReceiveModel sender, CoreMessage data)
         {
             base.DataExchangerDataSent(sender, data);
         }
 
-        public override void DataExchangerDisconnected(ISendReceiveModel<CoreMessage> exchangerModel)
+        public override void DataExchangerDisconnected(ISendReceiveModel exchangerModel)
         {
             base.DataExchangerDisconnected(exchangerModel);
         }

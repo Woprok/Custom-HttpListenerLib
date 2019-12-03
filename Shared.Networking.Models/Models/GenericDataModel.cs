@@ -70,7 +70,7 @@ namespace Shared.Networking.Models.Models
         public ISerializer Serializer { get; }
 
         /// <inheritdoc/>
-        public Dictionary<long, ISendReceiveModel<T>> DataExchangers { get; set; } = new Dictionary<long, ISendReceiveModel<T>>();
+        public Dictionary<long, ISendReceiveModel> DataExchangers { get; set; } = new Dictionary<long, ISendReceiveModel>();
 
         /// <summary>
         /// DataExchangers can be accessed from different methods at same time.
@@ -113,7 +113,7 @@ namespace Shared.Networking.Models.Models
         {
             newclient.ReceiveBufferSize = BufferSize;
             newclient.SendBufferSize = BufferSize;
-            SendReceiveModel<T> exchanger = new SendReceiveModel<T>(idHolder.NewId, newclient, Serializer);
+            SendReceiveModel exchanger = new SendReceiveModel(idHolder.NewId, newclient, Serializer);
             exchanger.Initialize();
             exchanger.OnSendReceiveModelDataReceived += DataExchangerDataReceived;
             exchanger.OnSendReceiveModelDataSent += DataExchangerDataSent;
@@ -127,7 +127,7 @@ namespace Shared.Networking.Models.Models
         }
 
         /// <inheritdoc/>
-        public ImmutableDictionary<long, ISendReceiveModel<T>> GetExchangers()
+        public ImmutableDictionary<long, ISendReceiveModel> GetExchangers()
         {
             lock (SynchronizedDataExchangersAccess)
             {
@@ -136,7 +136,7 @@ namespace Shared.Networking.Models.Models
         }
 
         /// <inheritdoc/>
-        public ImmutableDictionary<long, ISendReceiveModel<T>> GetValidatedExchangers()
+        public ImmutableDictionary<long, ISendReceiveModel> GetValidatedExchangers()
         {
             lock (SynchronizedDataExchangersAccess)
             {
@@ -145,7 +145,7 @@ namespace Shared.Networking.Models.Models
         }
 
         /// <inheritdoc/>
-        public ImmutableDictionary<long, ISendReceiveModel<T>> GetValidatedExchangerByIds(HashSet<long> ids)
+        public ImmutableDictionary<long, ISendReceiveModel> GetValidatedExchangerByIds(HashSet<long> ids)
         {
             lock (SynchronizedDataExchangersAccess)
             {
@@ -172,12 +172,12 @@ namespace Shared.Networking.Models.Models
         }
 
         /// <inheritdoc/>
-        public virtual void DataExchangerDisconnected(ISendReceiveModel<T> exchangerModel)
+        public virtual void DataExchangerDisconnected(ISendReceiveModel exchangerModel)
         {
             RemoveClientHandlers(exchangerModel);
         }
 
-        private void RemoveClientHandlers(ISendReceiveModel<T> exchangerModel)
+        private void RemoveClientHandlers(ISendReceiveModel exchangerModel)
         {
             exchangerModel.Stop();
             exchangerModel.OnSendReceiveModelDataReceived -= DataExchangerDataReceived;
@@ -191,10 +191,10 @@ namespace Shared.Networking.Models.Models
         }
 
         /// <inheritdoc/>
-        public virtual void DataExchangerDataSent(ISendReceiveModel<T> sender, T data) { }
+        public virtual void DataExchangerDataSent(ISendReceiveModel sender, T data) { }
 
         /// <inheritdoc/>
-        public virtual void DataExchangerDataReceived(ISendReceiveModel<T> exchangerModel, T data) { }
+        public virtual void DataExchangerDataReceived(ISendReceiveModel exchangerModel, T data) { }
 
         /// <inheritdoc/>
         public void StartRunning()

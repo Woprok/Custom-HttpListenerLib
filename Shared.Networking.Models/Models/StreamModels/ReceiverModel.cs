@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Net.Sockets;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Shared.Common.Exceptions;
@@ -11,7 +10,10 @@ namespace Shared.Networking.Models.Models.StreamModels
     public sealed class ReceiverModel : DataStreamModel, IReceiver
     {
         /// <inheritdoc/>
-        public event DataReceived<object> OnDataReceived;
+        public event DataReceivedSuccess OnDataReceivedSuccess;
+
+        /// <inheritdoc/>
+        public event DataReceivedError OnDataReceivedError;
 
         /// <inheritdoc/>
         public event ClientDisconnected OnClientDisconnected;
@@ -22,26 +24,34 @@ namespace Shared.Networking.Models.Models.StreamModels
         /// <exception cref="EventNotSubscribedException"/>
         public async Task ReceiveAsync(CancellationToken token)
         {
-            byte[] buffer = new byte[Client.ReceiveBufferSize];
-            while (IsConnected && !token.IsCancellationRequested)
+            try
             {
-                object deserializedObject;
-                string content = Client.ReceiveAsync();
-
-
-                if (string.IsNullOrEmpty(content))
+                byte[] buffer = new byte[Client.ReceiveBufferSize];
+                while (Client.Connected && !token.IsCancellationRequested)
                 {
-                    if (OnClientDisconnected == null)
-                        throw new EventNotSubscribedException("Disconnect method in Receiver not subscribed!");
-                    await Task.Run(() => OnClientDisconnected?.Invoke(this), token);
+                    object deserializedObject;
+                    string content = await Client.ReceiveAsync();
+
+                    if (string.IsNullOrEmpty(content))
+                    {
+                        if (OnClientDisconnected == null)
+                            throw new EventNotSubscribedException("Disconnect method in Receiver not subscribed!");
+                        await Task.Run(() => OnClientDisconnected?.Invoke(this), token);
+                    }
+                    else
+                    {
+                        deserializedObject = Serializer.DeserializeReceivedData(content);
+                        if (OnDataReceivedSuccess == null)
+                            throw new EventNotSubscribedException("Receive method not subscribed!");
+                        await Task.Run(() => OnDataReceivedSuccess?.Invoke(this, deserializedObject), token);
+                    }
                 }
-                else
-                {
-                    deserializedObject = Serializer.DeserializeReceivedData<dynamic>(content);
-                    if (OnDataReceived == null)
-                        throw new EventNotSubscribedException("Receive method not subscribed!");
-                    await Task.Run(() => OnDataReceived?.Invoke(this, deserializedObject), token);
-                }
+            }
+            catch (Exception e)
+            {
+                if (OnDataReceivedError == null)
+                    throw new EventNotSubscribedException("Receive error method not subscribed!");
+                await Task.Run(() => OnDataReceivedError?.Invoke(this, e), token);
             }
         }
     }

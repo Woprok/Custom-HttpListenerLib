@@ -7,39 +7,39 @@ namespace Shared.Networking.Models.Interfaces
     /// <summary>
     /// Default event for publishing client disconnected status.
     /// </summary>
-    public delegate void SendReceiveModelDisconnected<T>(ISendReceiveModel<T> receiver);
+    public delegate void SendReceiveModelDisconnected<T>(ISendReceiveModel receiver);
 
     /// <summary>
     /// Default event for publishing sent data.
     /// </summary>
-    public delegate void SendReceiveModelDataSent<T>(ISendReceiveModel<T> sender, T data);
+    public delegate void SendReceiveModelDataSent<T>(ISendReceiveModel sender, T data);
     
     /// <summary>
     /// Default event for publishing received data.
     /// </summary>
-    public delegate void SendReceiveModelDataReceived<T>(ISendReceiveModel<T> receiver, T data);
+    public delegate void SendReceiveModelDataReceived<T>(ISendReceiveModel receiver, T data);
 
     /// <summary>
     /// United model for receiving and sending data of type T.
     /// </summary>
     /// <inheritdoc cref="IStartStopModel"/>
     /// <inheritdoc cref="ISerializationModel"/>
-    public interface ISendReceiveModel<T> : IStartStopModel, ISerializationModel
+    public interface ISendReceiveModel : IStartStopModel, ISerializationModel
     {
         /// <summary>
         /// Subscribe-able event used for obtaining client disconnected status.
         /// </summary>
-        event SendReceiveModelDisconnected<T> OnSendReceiveModelDisconnected;
+        event SendReceiveModelDisconnected<object> OnSendReceiveModelDisconnected;
         
         /// <summary>
         /// Subscribe-able event for sent data.
         /// </summary>
-        event SendReceiveModelDataSent<T> OnSendReceiveModelDataSent;
+        event SendReceiveModelDataSent<object> OnSendReceiveModelDataSent;
 
         /// <summary>
         /// Subscribe-able event used to obtain received data.
         /// </summary>
-        event SendReceiveModelDataReceived<T> OnSendReceiveModelDataReceived;
+        event SendReceiveModelDataReceived<object> OnSendReceiveModelDataReceived;
 
         /// <summary>
         /// Provides unique identifier for this SendReceiveModel.
@@ -59,7 +59,7 @@ namespace Shared.Networking.Models.Interfaces
         /// Method for sending object of type T.
         /// Implementation of this function should be async.
         /// </summary>
-        void Send(T obj);
+        void Send(object obj);
 
         /// <summary>
         /// Holds information about authentication.

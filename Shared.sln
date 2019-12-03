@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29519.87
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.902
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.Server", "Demo.Server\Demo.Server.csproj", "{C8BE2DD4-233A-4150-8E71-4C02177114CA}"
 EndProject
@@ -12,8 +12,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Networking.Advanced", "Shared.Networking.Advanced\Shared.Networking.Advanced.csproj", "{81612B90-63B0-4642-8AB8-8D36184F9595}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Networking.Models", "Shared.Networking.Models\Shared.Networking.Models.csproj", "{BDA4C682-0C92-463C-93A5-426DDE187CAB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Networking.DataEntities", "Shared.Networking.DataEntities\Shared.Networking.DataEntities.csproj", "{8BB1529D-1994-4A64-9204-BDCF0F933A83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +39,6 @@ Global
 		{BDA4C682-0C92-463C-93A5-426DDE187CAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDA4C682-0C92-463C-93A5-426DDE187CAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDA4C682-0C92-463C-93A5-426DDE187CAB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8BB1529D-1994-4A64-9204-BDCF0F933A83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8BB1529D-1994-4A64-9204-BDCF0F933A83}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8BB1529D-1994-4A64-9204-BDCF0F933A83}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8BB1529D-1994-4A64-9204-BDCF0F933A83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

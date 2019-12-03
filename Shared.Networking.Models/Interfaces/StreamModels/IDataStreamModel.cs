@@ -1,7 +1,7 @@
 ﻿namespace Shared.Networking.Models.Interfaces.StreamModels
 {
     /// <summary>
-    /// Provides shared methods for Sending and Receiving over TcpClient.
+    /// Provides shared methods for Sending and Receiving over net.
     /// </summary>
     public interface IDataStreamModel
     {
@@ -14,10 +14,5 @@
         /// Returns ISerializer currently in use by model.
         /// </summary>
         ISerializer Serializer { get; }
-
-        /// <summary>
-        /// Returns current connection state of TcpClient.
-        /// </summary>
-        bool IsConnected { get; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Shared.Common.Enums;
+using Shared.Common.Exceptions;
 using Shared.Common.Interfaces;
 
 namespace Shared.Common.Models

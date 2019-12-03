@@ -1,12 +1,17 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Shared.Networking.Models.Interfaces.StreamModels
 {
     /// <summary>
-    /// Default event for publishing sent data.
+    /// Default event for publishing sent data on success.
     /// </summary>
-    public delegate void DataSent<T>(ISender sender, T data);
+    public delegate void DataSentSuccess(ISender sender, object data);
+    /// <summary>
+    /// Default event for publishing sent data failure.
+    /// </summary>
+    public delegate void DataSentError(ISender sender, Exception e, object data);
 
     /// <summary>
     /// Standard interface for data sending.
@@ -16,8 +21,11 @@ namespace Shared.Networking.Models.Interfaces.StreamModels
         /// <summary>
         /// Subscribe-able event for sent data.
         /// </summary>
-        event DataSent<object> OnDataSent;
-        
+        event DataSentSuccess OnDataSentSuccess;
+        /// <summary>
+        /// Subscribe-able event for sent data failure.
+        /// </summary>
+        event DataSentError OnDataSentError;
         /// <summary>
         /// Async method for sending object of type T.
         /// </summary>
